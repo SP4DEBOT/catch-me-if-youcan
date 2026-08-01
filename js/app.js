@@ -1,11 +1,15 @@
 const button = document.getElementById("catch-btn")
 const header = document.getElementById("header")
 
+const modal = document.getElementById("victory")
+const restartButton = document.getElementById("restart")
+
 
 let escapes = 0
 let attempts = 0
 let seconds =0 
 let minutes =0
+let gameOver = false
 
 button.addEventListener("mouseenter", () => {
     //button movement will be delayed when escapes increasing
@@ -45,7 +49,29 @@ button.addEventListener("mouseenter", () => {
 
     }
 
+   
+
 });
+
+button.addEventListener("click",()=>{
+    if(gameOver){
+        return
+    }
+
+    gameOver = true
+    attempts++
+    document.getElementById("attempts").textContent = attempts
+    clearInterval(timer)
+    //displaying the final stats
+    document.getElementById("final-attempts").textContent = "Attempts: " + attempts
+    document.getElementById("final-escapes").textContent = "Escapes: " + escapes
+    document.getElementById("final-time").textContent = "Time: " + 
+        String(minutes).padStart(2,0)+":"+String(seconds).padStart(2,0);
+
+    document.getElementById("final-message").textContent = randomItem(finalRoasts)
+    modal.classList.remove("hidden")
+
+})
 
 function moveButton() {
     const headerHeight = header.offsetHeight
@@ -97,4 +123,13 @@ function updateTimer(){
     }
 
     const displayMinutes = String(minutes).padStart(2,"0")
+    const displaySeconds = String(seconds).padStart(2,"0")
+    document.getElementById("timer").textContent = `${displayMinutes}:${displaySeconds}`
+
+    const timer = setInterval(updateTimer,1000)
+
 }
+
+restartButton.addEventListener("click", ()=>{
+    location.reload()
+})
